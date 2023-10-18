@@ -1,59 +1,33 @@
-What is strace
-===================
+**strace - System Call Tracing** 🔍
+---
 
-strace stands for system call tracer
+1. **Explain the technical concept**:
 
-It is a debugging tool that 
-	monitors the system calls used by a program and 
-	all the signals it receives.
+   - **strace**: 
+     - A diagnostic and debugging tool in Linux that intercepts and records the system calls made by a process and the signals it receives.
+     - System calls are the requests made by user-space applications to the operating system kernel for various services, such as reading a file or sending data over a network.
 
-System calls are used by userspace applications when they need to do something that requires the kernel. 
+   - **Purpose**:
+     - By observing the system calls and signals, users can gain insight into the inner workings of an application, diagnose issues, and understand its interactions with the kernel.
+    
+   - **Output**:
+     - The tool outputs each system call with its arguments and its return value. Errors are especially highlighted with error codes and descriptions.
 
-What it does
-===================
+2. **Curious Questions**:
 
-----> Learn which system calls a program make
+   - **Q**: Why would you want to use strace instead of a traditional debugger like gdb?
+     - **A**: `strace` is specifically tailored for tracing system calls. It's lightweight, and if you suspect an issue is related to system interactions (like file access or network operations), `strace` can give direct insights without the overhead of a full debugger.
 
-----> Find those system calls that fail together with error code
+   - **Q**: How can strace help in identifying performance bottlenecks?
+     - **A**: If an application is making an excessive number of certain system calls (e.g., file reads/writes), `strace` can highlight this, indicating potential optimization areas.
 
-----> Find which files a program opens
+   - **Q**: Can strace show interactions with shared libraries?
+     - **A**: No, `strace` focuses on system calls. For tracing library calls, `ltrace` is the tool to use.
 
-----> Find out what syscalls a running program is making, for example to see if it is struck in a loop
+3. **Explain the concept in simple words**:
+   
+   - Imagine you have a magic window 🪟 that lets you see every time someone knocks on a door (makes a system call) in a big building (the operating system). 
+     - Each knock is either answered (successful system call) or ignored (failed system call). 
+     - Using `strace` is like watching through this window, observing all the knocks and responses to understand what's happening inside.
 
-
-
-Using strace is quite simple. There are two ways to let strace monitor a program.
-
-Method 1:
-=========
-
-$ strace program_name
-
-Ex: $ strace ls
-
-$strace pwd
-
-Reading strace output:
-
-Each line in the output represents a system call. They follow the format: 
-
-system_call(argument1, argument2, ... ) = return_value 
-
-Errors (typically a return value of -1) have the errno symbol and error string appended.
-
-open("/foo/bar", O_RDONLY) = -1 ENOENT (No such file or directory)
-
-strace emits its entire output to stderr
-
-
-Method 2:
-============
-
-If we want to monitor a process which is currently running we can attach to the process using –p option
-
-$ strace –p <pid-of-the-application>
-
-
-$ dd if=/dev/zero of=/dev/null bs=1 count=500k
-$ strace dd if=/dev/zero of=/dev/null bs=1 count=500k
-
+**Note**: The commands you provided demonstrate how to use `strace` with a given program (`strace program_name`) and how to attach `strace` to an already running process using its process ID (`strace –p <pid>`). The output is rich with information that helps in diagnosing various system-related issues an application might encounter.
